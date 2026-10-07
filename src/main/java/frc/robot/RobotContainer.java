@@ -8,7 +8,11 @@ package frc.robot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.Commands.Drive;
 import frc.robot.constants.Constants;
+import frc.robot.subsystems.arm.ArmPitch;
+import frc.robot.subsystems.arm.ArmPivot;
+import frc.robot.subsystems.drive.Drivetrain;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -19,10 +23,16 @@ import frc.robot.constants.Constants;
 public class RobotContainer {
 
     CommandXboxController primary;
+    private final ArmPitch arm;
+    private final ArmPivot wrist;
+    private final Drivetrain drive;
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     public RobotContainer() {
         primary = new CommandXboxController(Constants.PRIMARY_CONTROLLER_PORT);
+        arm = new ArmPitch();
+        wrist = new ArmPivot();
+        drive = new Drivetrain();
         configureBindings();
     }
 
@@ -35,7 +45,11 @@ public class RobotContainer {
      * PS4} controllers or {@link edu.wpi.first.wpilibj2.command.button.CommandJoystick Flight
      * joysticks}.
      */
-    private void configureBindings() {}
+    private void configureBindings() {
+        primary.a().onTrue(arm.toggle(arm));
+        primary.b().onTrue(wrist.toggle(wrist));
+        drive.setDefaultCommand(new Drive(drive, primary));
+    }
 
     /**
      * Use this to pass the autonomous command to the main {@link Robot} class.
