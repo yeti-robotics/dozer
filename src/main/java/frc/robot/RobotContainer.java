@@ -46,10 +46,9 @@ public class RobotContainer {
      * joysticks}.
      */
     private void configureBindings() {
-        primary.a().onTrue(arm.toggle());
-        primary.b().onTrue(wrist.toggle());
+        primary.a().onTrue(arm.toggle(arm));
+        primary.b().onTrue(wrist.toggle(wrist));
         drive.setDefaultCommand(new Drive(drive, primary));
-
     }
 
     /**
